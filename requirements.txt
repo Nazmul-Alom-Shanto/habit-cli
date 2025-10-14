@@ -5,3 +5,4 @@ sqlite3
 # optional for graphs or stats:
 matplotlib
 pandas
+
