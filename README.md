@@ -120,46 +120,56 @@ habit archive <id>  # Archive a habit (keep its history) |	habit archive 2
 habit unarchive <id>    # Reactivate an archived habit |	habit unarchive 2
 habit delete <id>	# Permanently remove a habit and its data | habit delete 4
 ```
-🏗️ Technical Stack
-Component	Library
-CLI Framework	`click`
-Terminal Output	`rich`
-Database	`SQLite`
-HTML Templates	`Jinja2`
-Packaging	`PyInstaller`
-📊 Example Output
-✅ Terminal Summary
-text
-+----+-------------------+---------+----------+
-| ID | Habit Name        | Streak  | Progress |
-+----+-------------------+---------+----------+
-|  1 | Read 20 pages     | 🔥 5d    | 83%      |
-|  2 | Morning Exercise  | 💪 12d   | 100%     |
-+----+-------------------+---------+----------+
-🖼️ HTML Report
-Visual graphs of habit consistency
+## 🏗️ Technical Stack
 
-Daily/weekly/monthly insights
+| Component | Library |
+|------------|----------|
+| CLI Framework | `click` |
+| Terminal Output | `rich` |
+| Database | `SQLite` |
+| HTML Templates | `Jinja2` |
+| Packaging | `PyInstaller` |
 
-Exportable & shareable format
+---
 
-🤝 Contributing
+## 📊 Example Output
+
+
+### ✅ Terminal Summary
+
+
++----+-------------------+---------+----------+
+| ID | Habit Name | Streak | Progress |
++----+-------------------+---------+----------+
+| 1 | Read 20 pages | 🔥 5d | 83% |
+| 2 | Morning Exercise | 💪 12d | 100% |
++----+-------------------+---------+----------+
+
+### 🖼️ HTML Report
+
+- Visual graphs of habit consistency  
+- Daily/weekly/monthly insights  
+- Exportable & shareable format  
+
+---
+
+## 🤝 Contributing
+
 Contributions, bug reports, and feature ideas are warmly welcome 💡
 
-Fork the repository
-
-Create your branch
-
 ```bash
+# Fork the repository
+# Create your branch
 git checkout -b feature/new-streak-algo
-Commit your changes
-```
-```bash
+
+# Commit your changes
 git commit -m "feat: Implement improved streak logic"
-Open a Pull Request
+
+# Open a Pull Request
+
 ```
-📜 License
+## 📜 License
 This project is licensed under the MIT License — see the LICENSE file for details.
 
-🧠 Built for productivity by Nazmul Alom Shanto
+## 🧠 Built for productivity by Nazmul Alom Shanto
 "Build habits. Shape your life — one command at a time." 🌿
