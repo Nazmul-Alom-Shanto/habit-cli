@@ -1,5 +1,5 @@
-from . import db_manager
-from .cli import cli
+from habit_tracker import db_manager
+from habit_tracker.cli import cli
 
 def main():
     """The main function to run the application."""

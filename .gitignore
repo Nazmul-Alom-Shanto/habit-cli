@@ -1,2 +1,17 @@
+# PyInstaller generated files
+build/
+dist/
+
+# PyInstaller spec file is often ignored too, but sometimes tracked if complex
+habit.spec
+
+# Python Virtual Environment
+testvenv/
+
+# Pycache files
 __pycache__/
-habit_summary.html
+
+# Log file (if you generate one)
+*.log
+
+tmp/
