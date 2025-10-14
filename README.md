@@ -138,12 +138,11 @@ habit delete <id>	# Permanently remove a habit and its data | habit delete 4
 ### ✅ Terminal Summary
 
 
-+----+-------------------+---------+----------+
 | ID | Habit Name | Streak | Progress |
-+----+-------------------+---------+----------+
+|----|-------------------|---------|----------|
 | 1 | Read 20 pages | 🔥 5d | 83% |
 | 2 | Morning Exercise | 💪 12d | 100% |
-+----+-------------------+---------+----------+
+
 
 ### 🖼️ HTML Report
 
