@@ -2,8 +2,10 @@ import click
 from datetime import date
 from rich.console import Console
 from rich.table import Table
-
+from pathlib import Path
 from . import db_manager, logic
+from jinja2 import Environment, FileSystemLoader
+import webbrowser
 
 console = Console()
 
@@ -158,3 +160,88 @@ def history(display_id):
         table.add_row(comp_date)
         
     console.print(table)
+
+
+
+@cli.command(name="summary-html")
+def summary_html():
+    """Generates an HTML summary report of your habits."""
+    console.print("Generating HTML summary...", style="cyan")
+
+    # 1. Prepare data using the NEW master function
+    context = logic.get_summary_data() # This now returns the full context dictionary
+    
+    # 2. Set up Jinja2 (no changes here)
+    template_dir = Path(__file__).resolve().parent.parent / "templates"
+    env = Environment(loader=FileSystemLoader(template_dir))
+    template = env.get_template("summary.html")
+    
+    # 3. Render the template by unpacking the context dictionary
+    html_output = template.render(**context)
+    
+    # 4 & 5. Save and open the file (no changes here)
+    output_path = Path.cwd() / "habit_summary.html"
+    with open(output_path, "w") as f:
+        f.write(html_output)
+        
+    console.print(f"✅ Summary saved to: [bold green]{output_path}[/bold green]")
+    
+    if click.confirm("Do you want to open the report now?"):
+        webbrowser.open(output_path.as_uri())
+
+
+
+@cli.command(name="summary")
+def summary_terminal():
+    """Prints a summarized report of your habits directly to the terminal."""
+    console.print("Fetching habit summary...", style="cyan")
+
+    # 1. Prepare data using the master function
+    context = logic.get_summary_data()
+
+    # The 'context' dictionary should contain a key for your habit data, 
+    # for example, 'habits' which is a list of habit objects/dictionaries.
+    habits_data = context.get('habits', []) 
+
+    if not habits_data:
+        console.print("[bold yellow]No active habits found to summarize.[/bold yellow]")
+        return
+
+    # 2. Create the Rich Table
+    table = Table(
+        title="Habit Tracker Summary", 
+        show_header=True, 
+        header_style="bold magenta", 
+        show_lines=True
+    )
+    
+    # Define columns based on the data you want to display
+    table.add_column("Habit Name", style="bold green", min_width=20)
+    table.add_column("Period", justify="center")
+    table.add_column("Current Streak", justify="right", style="cyan")
+    table.add_column("Longest Streak", justify="right", style="blue")
+    table.add_column("Completion %", justify="right", style="yellow")
+
+    # 3. Populate the Table with data
+    for habit in habits_data:
+        # Assuming your habit data structure looks something like this:
+        name = habit.get("name", "N/A")
+        period = habit.get("period", "N/A").title() # e.g., 'daily' -> 'Daily'
+        current_streak = str(habit.get("current_streak", 0))
+        longest_streak = str(habit.get("longest_streak", 0))
+        # Calculate a simple completion percentage for display
+        total_checks = habit.get("total_checks", 0)
+        total_possible = habit.get("total_possible", 1) # Avoid ZeroDivisionError
+        completion_percent = f"{(total_checks / total_possible) * 100:.1f}%"
+        
+        table.add_row(
+            name,
+            period,
+            current_streak,
+            longest_streak,
+            completion_percent
+        )
+
+    # 4. Print the table to the console
+    console.print(table)
+    console.print("\n[bold green]Summary complete.[/bold green]")

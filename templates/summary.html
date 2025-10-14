@@ -1,10 +1,105 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Habit Summary</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habit Progress Summary</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <style>
+        body { padding: 1rem; }
+        .container { max-width: 1100px; }
+        .habit-card { margin-bottom: 2rem; }
+        .calendar-grid {
+            border-collapse: collapse;
+            width: 100%;
+            table-layout: fixed;
+        }
+        .calendar-grid th, .calendar-grid td {
+            text-align: center;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            height: 50px;
+        }
+        .calendar-grid th { background-color: #f7f7f7; }
+        .day-cell { font-weight: bold; }
+        .day-cell.empty { background-color: #fafafa; }
+        .day-cell.completed { background-color: #4caf50; color: white; }
+        .day-cell.missed { background-color: #f44336; color: white; opacity: 0.7; }
+        .day-cell.future, .day-cell.before_creation { background-color: #f1f1f1; color: #aaa; }
+    </style>
 </head>
 <body>
-    <h1>Habit Tracker Summary</h1>
-    <!-- Placeholder for Jinja2-rendered content -->
+    <main class="container">
+        <header>
+            <h1>Habit Progress Summary</h1>
+            <p>Report generated on: {{ generation_date }}</p>
+        </header>
+
+        {% for habit in habits %}
+        <article class="habit-card">
+            <header>
+                <h3>{{ habit.name }}</h3>
+                <small>Created on: {{ habit.created_at.split(' ')[0] }}</small>
+            </header>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Current Streak</th>
+                        <th>Longest Streak</th>
+                        <th>Completion Rate</th>
+                        <th>Total Completions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ habit.current_streak }} days</td>
+                        <td>{{ habit.longest_streak }} days</td>
+                        <td>{{ "%.1f"|format(habit.completion_rate) }}%</td>
+                        <td>{{ habit.total_completions }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>{{ calendar_month }} {{ calendar_year }} Progress</h4>
+            <table class="calendar-grid">
+                <thead>
+                    <tr>
+                        <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for week in habit.calendar %}
+                    <tr>
+                        {% for day in week %}
+                        <td class="day-cell {{ day.status }}">
+                            {{ day.day if day.day is not none }}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            {% if habit.missed_dates %}
+            <footer>
+                <details>
+                    <summary>View {{ habit.missed_dates|length }} Missed Days</summary>
+                    <ul>
+                        {% for missed_day in habit.missed_dates|sort(reverse=True) %}
+                        <li>{{ missed_day.strftime("%A, %B %d") }}</li>
+                        {% endfor %}
+                    </ul>
+                </details>
+            </footer>
+            {% endif %}
+
+        </article>
+        {% else %}
+        <article>
+            <p>No active habits found. Use <code>habit add</code> to get started!</p>
+        </article>
+        {% endfor %}
+    </main>
 </body>
 </html>
