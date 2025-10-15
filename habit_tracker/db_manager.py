@@ -3,8 +3,11 @@ from pathlib import Path
 from datetime import date
 
 # Define the path to the database file relative to the project root
-DB_PATH = Path(__file__).resolve().parent.parent / "db" / "habits.db"
+DB_DIR = Path.home() / ".habit-cli"
+# Define the final database path
+DB_PATH = DB_DIR / "habits.db"
 DB_PATH.parent.mkdir(parents=True, exist_ok=True) # Ensure the 'db' directory exists
+
 
 def get_db_connection():
     """Establishes a connection to the SQLite database."""
